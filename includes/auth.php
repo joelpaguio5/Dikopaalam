@@ -18,9 +18,11 @@ function require_login() {
 
 
 function get_user_profile($user_id, $token) {
-    $response = sb_request('GET', 'profiles', 'id=eq.' . $user_id, null, $token);
-    if ($response['status'] === 200 && !empty($response['data'])) {
-        return $response['data'][0];
+    // sb_request() returns the decoded rows directly on success (a list),
+    // or an array with 'http_code' on failure. It never returns 'status'/'data'.
+    $response = sb_request('GET', 'profiles', 'id=eq.' . urlencode($user_id) . '&select=*', null, $token);
+    if (is_array($response) && isset($response[0]['id'])) {
+        return $response[0];
     }
     return null;
 }

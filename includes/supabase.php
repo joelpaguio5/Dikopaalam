@@ -80,19 +80,29 @@ function sb_login($email, $password) {
         'response_body' => json_decode($response, true) ?: $response
     ];
 }
-function sb_register($email, $password, $fullName = '') {
+function sb_register($email, $password, $fullName = '', $role = 'user', $userType = 'client', $phone = '') {
     $config = get_supabase_config();
     $endpoint = rtrim($config['url'], '/') . '/auth/v1/signup';
 
+    // Only allow known user types; anything else becomes "client".
+    if (!in_array($userType, ['client', 'caregiver'], true)) {
+        $userType = 'client';
+    }
+
     // The REST API takes user metadata under a top-level "data" key
     // ("options.data" is only for supabase-js, so it was being ignored).
-    // The handle_new_user() trigger in the database reads full_name from here
-    // and creates the matching row in public.profiles.
+    // The handle_new_user() trigger reads these values and creates the matching
+    // row in public.profiles.
+    // NOTE: $role is intentionally NOT sent. Metadata is controlled by whoever
+    // calls the API, so the role must be decided by the database (default 'user'),
+    // and admins should be promoted manually in Supabase.
     $payload = json_encode([
         'email' => $email,
         'password' => $password,
         'data' => [
-            'full_name' => $fullName
+            'full_name' => $fullName,
+            'user_type' => $userType,
+            'phone'     => $phone
         ]
     ]);
 
