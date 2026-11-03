@@ -23,27 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'samesite' => 'Lax'
             ]);
 
-            $profileResponse = sb_request('GET', 'profiles', 'id=eq.' . $userId, null, $token);
-            
-            // Default role to patient if profile table doesn't have a record yet
-            $role = 'patient';
-            if (!isset($profileResponse['http_code']) || $profileResponse['http_code'] === 200) {
-                $profileData = isset($profileResponse[0]) ? $profileResponse[0] : ($profileResponse['data'][0] ?? null);
-                if (isset($profileData['role'])) {
-                    $role = $profileData['role'];
-                }
+            $profileResponse = sb_request('GET', 'profiles', 'id=eq.' . urlencode($userId) . '&select=*', null, $token);
+
+            // Default to a normal user if the profile row can't be read
+            $role = 'user';
+            if (is_array($profileResponse) && isset($profileResponse[0]['role'])) {
+                $role = $profileResponse[0]['role'];
             }
 
+            // Routes match vercel.json: /admin/ and /user/
             if ($role === 'admin') {
                 header('Location: /admin/');
-            } elseif ($role === 'counselor') {
-                header('Location: /counselor/');
             } else {
-                header('Location: /patient/');
+                header('Location: /user/');
             }
             exit;
         } else {
-            $error = 'Invalid email or password.';
+            // Show the real reason instead of always saying "Invalid email or password."
+            $code = $authResult['response_body']['error_code'] ?? '';
+            if ($code === 'email_not_confirmed') {
+                $error = 'Please confirm your email first. Check your inbox for the confirmation link.';
+            } elseif ($code === 'invalid_credentials') {
+                $error = 'Invalid email or password.';
+            } else {
+                $error = 'Login failed. Please try again.';
+            }
         }
     } else {
         $error = 'Please fill in all fields.';
