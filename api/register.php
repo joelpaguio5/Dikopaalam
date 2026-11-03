@@ -12,12 +12,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($fullName) || empty($email) || empty($password)) {
         $error = 'Please fill in all required fields.';
     } else {
-        // Call Supabase registration helper
+        // 1. Register user via Supabase Auth
         $result = sb_register($email, $password, $fullName);
 
         if (isset($result['error'])) {
             $error = is_array($result['error']) ? ($result['error']['msg'] ?? 'Registration failed') : $result['error'];
         } else {
+            // 2. Grab the newly created user's ID from Supabase response
+            $userId = $result['id'] ?? $result['user']['id'] ?? null;
+
+            if ($userId) {
+                // 3. Insert matching data into your public.profiles table
+                $profileData = [
+                    'id' => $userId,
+                    'full_name' => $fullName,
+                    'email' => $email,
+                    'created_at' => date('c')
+                ];
+                
+                // Assuming your supabase wrapper has a table insert helper (e.g., sb_insert or sb_from)
+                // If using direct REST/curl helper in your project:
+                sb_insert('profiles', $profileData);
+            }
+
             $success = 'Registration successful! You can now log in.';
         }
     }
@@ -62,17 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn-primary">Register</button>
         </form>
 
-        <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
-            Already have an account? <a href="/login.php" style="color: var(--primary); text-decoration: none;">Login here</a>
+        <!-- Removed inline styles and switched entirely to public CSS classes -->
+        <p class="auth-footer-text">
+            Already have an account? <a href="/login.php" class="auth-link">Login here</a>
         </p>
     </div>
 </body>
 </html>
-```[cite: 1, 2, 4, 6]
-
----
-
-### 2. Verify Vercel Routes Mapping
-Your `vercel.json` routing rules already map `/register.php` directly to `/api/register.php`[cite: 4]:
-```json
-{ "src": "^/register\\.php$", "dest": "/api/register.php" }

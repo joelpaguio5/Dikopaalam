@@ -30,6 +30,23 @@ body {
     line-height: 1.5;
 }
 
+.auth-footer-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.auth-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
 /* ==========================================
    2. AUTHENTICATION PAGES (Login / Register)
    ========================================== */
