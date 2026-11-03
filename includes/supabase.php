@@ -1,4 +1,14 @@
 <?php
+
+
+if (!defined('SUPABASE_URL')) {
+    define('SUPABASE_URL', getenv('SUPABASE_URL') ?: ($_ENV['SUPABASE_URL'] ?? ''));
+}
+
+if (!defined('SUPABASE_ANON_KEY')) {
+    define('SUPABASE_ANON_KEY', getenv('SUPABASE_ANON_KEY') ?: ($_ENV['SUPABASE_ANON_KEY'] ?? ''));
+}
+
 function load_env($path) {
     if (!file_exists($path)) {
         return;
