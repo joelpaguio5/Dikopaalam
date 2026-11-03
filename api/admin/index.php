@@ -8,7 +8,7 @@ $token = require_login();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Patient Dashboard - SerenityCare</title>
+    <title>ADMIN malakas Dashboard - Appnapamalakasan</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@ $token = require_login();
             <a href="/logout.php" class="btn-logout">Logout</a>
         </header>
         <main>
-            <p>Welcome to your portal! Your teammates can build appointment booking and results modules here.</p>
+            <p>WELCOME KKUUPAALLLL HAHAHAHAH</p>
         </main>
     </div>
 </body>

@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SerenityCare</title>
+    <title>Login - Deployed</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="auth-body">
     <div class="auth-card">
-        <h2>SerenityCare Login</h2>
+        <h2>Basta Ma deploy muna Login</h2>
         <?php if (!empty($error)): ?>
             <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
