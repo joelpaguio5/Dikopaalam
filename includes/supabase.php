@@ -80,49 +80,36 @@ function sb_login($email, $password) {
         'response_body' => json_decode($response, true) ?: $response
     ];
 }
-function sb_register($email, $password, $fullName = '') {
-    $config = get_supabase_config();
-    $endpoint = rtrim($config['url'], '/') . '/auth/v1/signup';
 
-    // The REST API takes user metadata under a top-level "data" key
-    // ("options.data" is only for supabase-js, so it was being ignored).
-    // The handle_new_user() trigger in the database reads full_name from here
-    // and creates the matching row in public.profiles.
-    $payload = json_encode([
+function sb_register($email, $password, $fullName, $role = 'user', $userType = 'client', $phone = '') {
+    $url = SUPABASE_URL . '/auth/v1/signup';
+    
+    $data = [
         'email' => $email,
         'password' => $password,
-        'data' => [
-            'full_name' => $fullName
+        'options' => [
+            'data' => [
+                'full_name' => $fullName,
+                'role' => $role,
+                'user_type' => $userType,
+                'phone' => $phone
+            ]
         ]
-    ]);
+    ];
 
-    $ch = curl_init($endpoint);
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'apikey: ' . $config['anon_key']
+        'apikey: ' . SUPABASE_ANON_KEY
     ]);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 
     $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    $decoded = json_decode($response, true);
-
-    if ($httpCode === 200 || $httpCode === 201) {
-        return $decoded;
-    }
-
-    // Supabase returns errors as {"msg": ...} or {"error_description": ...},
-    // not under an "error" key, so normalise them here.
-    $message = 'Registration failed';
-    if (is_array($decoded)) {
-        $message = $decoded['msg'] ?? $decoded['error_description'] ?? $decoded['message'] ?? $message;
-    }
-    return ['error' => $message, 'http_code' => $httpCode];
+    return json_decode($response, true);
 }
 /**
  * Make REST API requests to Supabase tables (Enforces RLS via user access token)

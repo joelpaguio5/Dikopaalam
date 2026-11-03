@@ -6,21 +6,21 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullName = trim($_POST['full_name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $phone    = trim($_POST['phone'] ?? '');
+    $role     = trim($_POST['role'] ?? 'user');
+    $userType = trim($_POST['user_type'] ?? 'client');
     $password = $_POST['password'] ?? '';
 
-    if (empty($fullName) || empty($email) || empty($password)) {
+    if (empty($fullName) || empty($email) || empty($password) || empty($phone)) {
         $error = 'Please fill in all required fields.';
     } else {
-        // 1. Register user via Supabase Auth
-        $result = sb_register($email, $password, $fullName);
+        // Register user via Supabase Auth with metadata
+        $result = sb_register($email, $password, $fullName, $role, $userType, $phone);
 
         if (isset($result['error'])) {
             $error = is_array($result['error']) ? ($result['error']['msg'] ?? 'Registration failed') : $result['error'];
         } else {
-            // 2. The profile row in public.profiles is created automatically by the
-            // handle_new_user() database trigger when the auth user is created,
-            // so no separate insert is needed here.
             $success = 'Registration successful! You can now log in.';
         }
     }
@@ -58,6 +58,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+1234567890" value="<?php echo htmlspecialchars($_POST['phone'] ?? ''); ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="user" <?php echo (($_POST['role'] ?? '') === 'user') ? 'selected' : ''; ?>>User</option>
+                    <option value="admin" <?php echo (($_POST['role'] ?? '') === 'admin') ? 'selected' : ''; ?>>Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="user_type">User Type</label>
+                <select id="user_type" name="user_type" required>
+                    <option value="client" <?php echo (($_POST['user_type'] ?? '') === 'client') ? 'selected' : ''; ?>>Client</option>
+                    <option value="caregiver" <?php echo (($_POST['user_type'] ?? '') === 'caregiver') ? 'selected' : ''; ?>>Caregiver</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
@@ -65,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn-primary">Register</button>
         </form>
 
-        <!-- Removed inline styles and switched entirely to public CSS classes -->
         <p class="auth-footer-text">
             Already have an account? <a href="/login.php" class="auth-link">Login here</a>
         </p>
