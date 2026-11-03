@@ -79,39 +79,33 @@ function sb_login($email, $password) {
         'response_body' => json_decode($response, true) ?: $response
     ];
 }
-
-function sb_register($email, $password, $fullName = '') {
-    $config = get_supabase_config();
-    $endpoint = $config['url'] . '/auth/v1/signup';
-
-    $payload = json_encode([
+function sb_register($email, $password, $fullName) {
+    $url = SUPABASE_URL . '/auth/v1/signup';
+    
+    $data = [
         'email' => $email,
         'password' => $password,
-        'data' => [
-            'full_name' => $fullName
+        'options' => [
+            'data' => [
+                'full_name' => $fullName
+            ]
         ]
-    ]);
+    ];
 
-    $ch = curl_init($endpoint);
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'apikey: ' . $config['anon_key']
+        'apikey: ' . SUPABASE_ANON_KEY
     ]);
 
     $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode === 200 || $httpCode === 201) {
-        return json_decode($response, true);
-    }
-
-    return ['error' => json_decode($response, true) ?: 'Registration failed'];
+    return json_decode($response, true);
 }
-
 /**
  * Make REST API requests to Supabase tables (Enforces RLS via user access token)
  */
