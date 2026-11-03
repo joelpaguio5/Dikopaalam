@@ -1,14 +1,5 @@
 <?php
 
-
-if (!defined('SUPABASE_URL')) {
-    define('SUPABASE_URL', getenv('SUPABASE_URL') ?: ($_ENV['SUPABASE_URL'] ?? ''));
-}
-
-if (!defined('SUPABASE_ANON_KEY')) {
-    define('SUPABASE_ANON_KEY', getenv('SUPABASE_ANON_KEY') ?: ($_ENV['SUPABASE_ANON_KEY'] ?? ''));
-}
-
 function load_env($path) {
     if (!file_exists($path)) {
         return;
@@ -89,32 +80,49 @@ function sb_login($email, $password) {
         'response_body' => json_decode($response, true) ?: $response
     ];
 }
-function sb_register($email, $password, $fullName) {
-    $url = SUPABASE_URL . '/auth/v1/signup';
-    
-    $data = [
+function sb_register($email, $password, $fullName = '') {
+    $config = get_supabase_config();
+    $endpoint = rtrim($config['url'], '/') . '/auth/v1/signup';
+
+    // The REST API takes user metadata under a top-level "data" key
+    // ("options.data" is only for supabase-js, so it was being ignored).
+    // The handle_new_user() trigger in the database reads full_name from here
+    // and creates the matching row in public.profiles.
+    $payload = json_encode([
         'email' => $email,
         'password' => $password,
-        'options' => [
-            'data' => [
-                'full_name' => $fullName
-            ]
+        'data' => [
+            'full_name' => $fullName
         ]
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'apikey: ' . SUPABASE_ANON_KEY
     ]);
 
+    $ch = curl_init($endpoint);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'apikey: ' . $config['anon_key']
+    ]);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+
     $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    return json_decode($response, true);
+    $decoded = json_decode($response, true);
+
+    if ($httpCode === 200 || $httpCode === 201) {
+        return $decoded;
+    }
+
+    // Supabase returns errors as {"msg": ...} or {"error_description": ...},
+    // not under an "error" key, so normalise them here.
+    $message = 'Registration failed';
+    if (is_array($decoded)) {
+        $message = $decoded['msg'] ?? $decoded['error_description'] ?? $decoded['message'] ?? $message;
+    }
+    return ['error' => $message, 'http_code' => $httpCode];
 }
 /**
  * Make REST API requests to Supabase tables (Enforces RLS via user access token)

@@ -18,23 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($result['error'])) {
             $error = is_array($result['error']) ? ($result['error']['msg'] ?? 'Registration failed') : $result['error'];
         } else {
-            // 2. Grab the newly created user's ID from Supabase response
-            $userId = $result['id'] ?? $result['user']['id'] ?? null;
-
-            if ($userId) {
-                // 3. Insert matching data into your public.profiles table
-                $profileData = [
-                    'id' => $userId,
-                    'full_name' => $fullName,
-                    'email' => $email,
-                    'created_at' => date('c')
-                ];
-                
-                // Assuming your supabase wrapper has a table insert helper (e.g., sb_insert or sb_from)
-                // If using direct REST/curl helper in your project:
-                sb_insert('profiles', $profileData);
-            }
-
+            // 2. The profile row in public.profiles is created automatically by the
+            // handle_new_user() database trigger when the auth user is created,
+            // so no separate insert is needed here.
             $success = 'Registration successful! You can now log in.';
         }
     }
