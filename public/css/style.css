@@ -95,6 +95,53 @@ body {
     text-decoration: underline;
 }
 
+/* "Login as: Student | Admin" switch (pure CSS, no JavaScript) */
+.role-toggle-label {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.role-toggle {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    padding: 4px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+}
+
+.role-toggle input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.role-toggle label {
+    flex: 1;
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.role-toggle input:checked + label {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.role-toggle input:focus-visible + label {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 /* ==========================================
    3. FORMS & INPUTS
    ========================================== */

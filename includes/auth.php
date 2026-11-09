@@ -51,11 +51,7 @@ function get_user_profile($user_id, $token) {
 
 /** Where each role lands after login (routes live in vercel.json). */
 function role_home($role) {
-    switch ($role) {
-        case 'admin':     return '/admin/';
-        case 'registrar': return '/registrar/';
-        default:          return '/user/';
-    }
+    return ($role === 'admin') ? '/admin/' : '/user/';
 }
 
 /** Only checks that a cookie exists. Use require_role() for real protection. */
@@ -69,7 +65,7 @@ function require_login() {
 }
 
 /**
- * Protect a page by role, e.g. require_role(['admin']) or require_role(['registrar', 'admin']).
+ * Protect a page by role: require_role(['admin']) or require_role(['student']).
  * Returns ['token', 'user', 'profile', 'role'] for the page to use.
  */
 function require_role(array $allowedRoles) {

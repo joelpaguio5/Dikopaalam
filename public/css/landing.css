@@ -1,6 +1,7 @@
 /* ==========================================
-   MatrikulaPH landing page
+   CCST Portal landing page
    Loaded after style.css, so it reuses its variables (--primary, --accent, --radius, ...)
+   To match the school's colors, change --primary and --accent in style.css.
    ========================================== */
 
 .landing-body {
@@ -142,7 +143,7 @@
     color: var(--text-muted);
 }
 
-/* ---------- "How it works" card beside the button ---------- */
+/* ---------- "How enrollment works" card beside the buttons ---------- */
 .how-card {
     background: var(--card-bg);
     padding: 2rem;
@@ -192,8 +193,8 @@
     color: var(--text-muted);
 }
 
-/* ---------- Direct link section ---------- */
-.direct-link {
+/* ---------- Student / Admin cards ---------- */
+.portal-roles {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem 1rem 4rem;
@@ -209,64 +210,21 @@
     font-size: clamp(1.6rem, 3vw, 2.1rem);
     line-height: 1.2;
     letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
 }
 
-.section-lead {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-}
-
-.link-demo {
+.role-card {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1rem;
-    margin-bottom: 2rem;
-    padding: 1rem 1.25rem;
-    background: var(--card-bg);
-    border: 1px dashed var(--primary);
-    border-radius: var(--radius);
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.link-demo-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+.role-card h3 {
+    font-size: 1.25rem;
 }
 
-.link-demo-url {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 1.05rem;
-    color: var(--text-main);
-    word-break: break-all;
-}
-
-.link-demo-url strong {
-    color: var(--primary);
-}
-
-/* ---------- Closing call to action ---------- */
-.closing {
-    max-width: 1200px;
-    margin: 0 auto 3rem;
-    padding: 3rem 1rem;
-    text-align: center;
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-}
-
-.closing h2 {
-    font-size: 1.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.closing p {
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
+.card-actions {
+    margin-top: auto;
+    padding-top: 1.25rem;
 }
 
 /* ---------- Footer ---------- */
@@ -285,12 +243,7 @@
         padding-top: 1.5rem;
     }
 
-    .nav-links a:not(.nav-cta):not([href="/login.php"]) {
+    .nav-links .nav-hide-mobile {
         display: none;
-    }
-
-    .closing {
-        margin-left: 1rem;
-        margin-right: 1rem;
     }
 }

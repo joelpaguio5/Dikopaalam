@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($fullName) || empty($email) || empty($phone) || empty($password)) {
         $error = 'Please fill in all required fields.';
     } elseif (!array_key_exists($applicantType, $applicantTypes)) {
-        $error = 'Please choose a valid applicant type.';
+        $error = 'Please choose a valid student type.';
     } elseif (strlen($password) < 8) {
         $error = 'Password must be at least 8 characters.';
     } elseif ($password !== $confirm) {
         $error = 'Passwords do not match.';
     } else {
-        // Role is never taken from the form. The database sets it to 'student'.
+        // Only students can register here. Admin accounts are created by the school.
         $result = sb_register($email, $password, $fullName, $applicantType, $phone);
 
         if (isset($result['error'])) {
@@ -43,14 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - MatrikulaPH</title>
+    <title>Student Sign Up - CCST Portal</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="auth-body">
     <div class="auth-card">
-        <div class="brand">Matrikula<span class="brand-ph">PH</span></div>
-        <h2>Create your account</h2>
-        <p class="auth-subtitle">Start your enrollment application.</p>
+        <div class="brand">CCST <span class="brand-ph">Portal</span></div>
+        <h2>Create your student account</h2>
+        <p class="auth-subtitle">Register to start your enrollment at Clark College of Science and Technology.</p>
 
         <?php if (!empty($error)): ?>
             <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label for="applicant_type">Applicant Type</label>
+                <label for="applicant_type">I am a</label>
                 <select id="applicant_type" name="applicant_type" required>
                     <?php foreach ($applicantTypes as $value => $label): ?>
                         <option value="<?php echo $value; ?>" <?php echo (($_POST['applicant_type'] ?? 'freshman') === $value) ? 'selected' : ''; ?>>
