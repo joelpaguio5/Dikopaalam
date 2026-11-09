@@ -1,0 +1,504 @@
+/* ==========================================
+   CCST Portal student dashboard (enrollment form on A4 paper)
+   Loaded after style.css, so it reuses its variables and .alert / .btn-logout classes.
+   ========================================== */
+
+/* ---------- Header ---------- */
+.dashboard-container header {
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.student-sub {
+    margin-top: 0.15rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.student-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.student-user-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-role      { background-color: #dbeafe; color: #1e40af; }
+.badge-draft     { background-color: #e2e8f0; color: #334155; }
+.badge-submitted { background-color: #dbeafe; color: #1e40af; }
+.badge-approved  { background-color: var(--success-bg); color: var(--success-text); }
+.badge-rejected  { background-color: var(--error-bg); color: var(--error-text); }
+
+/* ---------- Status strip and toolbar ---------- */
+.status-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.status-label {
+    font-weight: 600;
+}
+
+.status-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-solid,
+.btn-outline {
+    padding: 0.7rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-solid {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: 1px solid var(--primary);
+}
+
+.btn-solid:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-outline {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.print-tip {
+    margin-bottom: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* ---------- Dashboard page (/user/) ---------- */
+.section {
+    margin-bottom: 2.5rem;
+}
+
+.section-title {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.welcome {
+    margin-bottom: 2rem;
+}
+
+.welcome h3 {
+    font-size: 1.4rem;
+}
+
+.welcome p {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.info-card {
+    padding: 1.25rem;
+    background: var(--card-bg);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.info-value {
+    margin-top: 0.4rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.module-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.module-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.module-card-head h3 {
+    margin-bottom: 0;
+}
+
+.module-card p {
+    flex: 1;
+}
+
+.btn-module {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 0.75rem;
+    padding: 0.55rem 1.1rem;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-module:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-module:disabled {
+    background-color: var(--border-color);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.badge-soon {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.details-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.6rem 2rem;
+    font-size: 0.95rem;
+}
+
+.details-list dt {
+    color: var(--text-muted);
+}
+
+.details-list dd {
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.muted {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* ---------- The A4 paper ---------- */
+.paper {
+    width: 210mm;
+    max-width: 100%;
+    min-height: 297mm;
+    margin: 0 auto 2rem;
+    padding: 14mm;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+}
+
+.paper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 5mm;
+    padding-bottom: 4mm;
+    border-bottom: 2px solid #000000;
+}
+
+.paper-school {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.paper-title {
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.paper-meta {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #444444;
+}
+
+.photo-box {
+    flex: 0 0 auto;
+    width: 32mm;
+    height: 32mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    text-align: center;
+    font-size: 0.65rem;
+    line-height: 1.3;
+    color: #555555;
+}
+
+/* ---------- Form sections and fields ---------- */
+.form-section {
+    margin-bottom: 5mm;
+}
+
+.form-section-title {
+    margin-bottom: 0.5rem;
+    padding: 2px 6px;
+    background-color: #e5e7eb;
+    border-bottom: 1px solid #000000;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem 0.9rem;
+}
+
+.f-2 { grid-column: span 2; }
+.f-3 { grid-column: span 3; }
+.f-4 { grid-column: span 4; }
+.f-6 { grid-column: span 6; }
+
+.f label {
+    display: block;
+    margin-bottom: 1px;
+    font-size: 0.7rem;
+    color: #444444;
+}
+
+.req {
+    color: var(--error-text);
+}
+
+.paper input,
+.paper select {
+    width: 100%;
+    padding: 0.35rem 0.4rem;
+    background-color: #f8fafc;
+    color: #000000;
+    border: none;
+    border-bottom: 1px solid #666666;
+    border-radius: 0;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.paper input:focus,
+.paper select:focus {
+    background-color: #eff6ff;
+    border-bottom-color: var(--primary);
+}
+
+/* Locked form (submitted or approved): keep the text dark and readable */
+.paper input:disabled,
+.paper select:disabled {
+    color: #000000;
+    -webkit-text-fill-color: #000000;
+    opacity: 1;
+    cursor: default;
+}
+
+.static-value {
+    padding: 0.35rem 0.4rem;
+    border-bottom: 1px solid #666666;
+    font-size: 0.9rem;
+    min-height: 1.9rem;
+}
+
+/* ---------- Certification and signatures ---------- */
+.certification {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: 10mm;
+    margin-top: 14mm;
+}
+
+.signature-line {
+    padding-top: 2px;
+    border-top: 1px solid #000000;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+/* ---------- Registrar box ---------- */
+.registrar-box {
+    padding: 3mm;
+    border: 1px solid #000000;
+}
+
+.registrar-title {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.registrar-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 1rem;
+}
+
+.registrar-wide {
+    grid-column: span 2;
+}
+
+.registrar-label {
+    font-size: 0.7rem;
+    color: #444444;
+}
+
+.blank-field {
+    min-height: 6mm;
+    padding: 2px 4px;
+    border-bottom: 1px solid #000000;
+    font-size: 0.9rem;
+}
+
+/* ---------- Phones and small screens (screen only) ---------- */
+@media screen and (max-width: 720px) {
+    .paper {
+        width: 100%;
+        min-height: 0;
+        padding: 1rem;
+    }
+
+    .f-2,
+    .f-3,
+    .f-4 {
+        grid-column: span 6;
+    }
+
+    .signature-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .dashboard-container header {
+        padding: 1rem 1.25rem;
+    }
+}
+
+/* ---------- Printing on A4 ---------- */
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+    html,
+    body {
+        background: #ffffff !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .dashboard-container {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .paper {
+        width: 210mm;
+        min-height: 0;
+        margin: 0;
+        padding: 12mm 14mm;
+        border: none;
+        box-shadow: none;
+        font-size: 9pt;
+    }
+
+    .paper,
+    .paper * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .paper input,
+    .paper select {
+        background-color: transparent;
+        border-bottom: 1px solid #444444;
+        padding: 2px 0;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .req {
+        display: none;
+    }
+
+    .form-section,
+    .registrar-box {
+        break-inside: avoid;
+    }
+}
