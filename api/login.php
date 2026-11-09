@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/supabase.php';
+require_once __DIR__ . '/../includes/auth.php';
 
 $error = '';
 
@@ -8,38 +8,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (!empty($email) && !empty($password)) {
-        // Authenticate via Supabase Auth REST API
         $authResult = sb_login($email, $password);
 
         if (isset($authResult['access_token'])) {
             $token = $authResult['access_token'];
             $userId = $authResult['user']['id'];
 
+            // Cookie lasts as long as the access token itself (Supabase default: 1 hour)
+            $lifetime = (int)($authResult['expires_in'] ?? 3600);
+
             setcookie('supabase_token', $token, [
-                'expires' => time() + 86400,
+                'expires' => time() + $lifetime,
                 'path' => '/',
                 'secure' => isset($_SERVER['HTTPS']),
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);
 
-            $profileResponse = sb_request('GET', 'profiles', 'id=eq.' . urlencode($userId) . '&select=*', null, $token);
+            $profile = get_user_profile($userId, $token);
+            $role = $profile['role'] ?? 'student';
 
-            // Default to a normal user if the profile row can't be read
-            $role = 'user';
-            if (is_array($profileResponse) && isset($profileResponse[0]['role'])) {
-                $role = $profileResponse[0]['role'];
-            }
-
-            // Routes match vercel.json: /admin/ and /user/
-            if ($role === 'admin') {
-                header('Location: /admin/');
-            } else {
-                header('Location: /user/');
-            }
+            header('Location: ' . role_home($role));
             exit;
         } else {
-            // Show the real reason instead of always saying "Invalid email or password."
             $code = $authResult['response_body']['error_code'] ?? '';
             if ($code === 'email_not_confirmed') {
                 $error = 'Please confirm your email first. Check your inbox for the confirmation link.';
@@ -59,27 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Deployed</title>
+    <title>Login - MatrikulaPH</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="auth-body">
     <div class="auth-card">
-        <h2>Basta Ma deploy muna Login</h2>
+        <div class="brand">Matrikula<span class="brand-ph">PH</span></div>
+        <h2>Sign in to your account</h2>
+        <p class="auth-subtitle">Enroll, track your application, and manage your records.</p>
+
         <?php if (!empty($error)): ?>
             <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-        
-        <form method="POST" action="login.php">
+
+        <form method="POST" action="/login.php">
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required autocomplete="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
             <button type="submit" class="btn-primary">Sign In</button>
-            <button type="button" class="btn-secondary" name="btn-logout" onclick="window.location.href='register.php'">Register</button>
+            <a href="/register.php" class="btn-secondary">Create an account</a>
         </form>
     </div>
 </body>
