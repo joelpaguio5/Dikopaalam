@@ -5,6 +5,8 @@
     }
   },
   "routes": [
+      { "src": "^/registrar/?$", "dest": "/api/registrar/index.php" },
+  { "src": "^/registrar/(.*)$", "dest": "/api/registrar/$1" },
     { "src": "^/css/(.*)$", "dest": "/public/css/$1" },
     { "src": "^/login\\.php$", "dest": "/api/login.php" },
     { "src": "^/logout\\.php$", "dest": "/api/logout.php" },
