@@ -1,0 +1,525 @@
+/* ==========================================
+   CCST Portal: shared theme
+   Soft white neumorphism, royal blue, with a tint of gold.
+
+   How the depth works
+   - Raised  = something you can act on or that holds content (cards, buttons, panels)
+   - Sunken  = something you type into or a well that holds raised items (inputs, toggles)
+   - Gold    = a thin accent only (brand, step numbers, active markers, focus line)
+
+   Every page loads this file first. Page files (landing, student, admin) only add layout.
+   ========================================== */
+
+/* ==========================================
+   1. TOKENS
+   ========================================== */
+:root {
+    /* Surface */
+    --bg-color: #f3f6fc;
+    --card-bg: #f3f6fc;
+    --snow: #ffffff;
+    --shade: rgba(150, 168, 203, 0.46);
+
+    /* Blue */
+    --primary: #2456d8;
+    --primary-hover: #1b45b3;
+    --primary-deep: #153890;
+    --primary-soft: #e3ebfd;
+
+    /* Gold (fills are light, text uses the deeper tone for contrast) */
+    --accent: #c79a3b;
+    --accent-bright: #e6c36c;
+    --accent-soft: #f8eed2;
+    --accent-text: #86610f;
+
+    /* Text and lines */
+    --text-main: #172443;
+    --text-muted: #5a6a8c;
+    --border-color: #dce4f2;
+
+    /* Status */
+    --error-bg: #fde9e9;
+    --error-text: #9b1c1c;
+    --success-bg: #def4e8;
+    --success-text: #14653f;
+
+    /* Shape */
+    --radius: 18px;
+    --radius-sm: 12px;
+
+    /* Depth */
+    --raise: 9px 9px 20px var(--shade), -9px -9px 20px var(--snow);
+    --raise-sm: 5px 5px 12px var(--shade), -5px -5px 12px var(--snow);
+    --raise-xs: 3px 3px 7px var(--shade), -3px -3px 7px var(--snow);
+    --raise-2xs: 2px 2px 4px var(--shade), -2px -2px 4px var(--snow);
+    --sink: inset 5px 5px 10px var(--shade), inset -5px -5px 10px var(--snow);
+    --sink-sm: inset 3px 3px 7px var(--shade), inset -3px -3px 7px var(--snow);
+    --shadow: var(--raise);
+
+    --focus-ring: 0 0 0 3px rgba(36, 86, 216, 0.28);
+
+    --font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ==========================================
+   2. BASE
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+    font-weight: 650;
+    letter-spacing: -0.012em;
+    line-height: 1.25;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================
+   3. BUTTONS
+   Two looks: blue (do the main thing) and surface (everything else).
+   Pressing a button pushes it in.
+   ========================================== */
+.btn-primary,
+.btn-solid,
+.btn-module,
+.btn-hero {
+    border: none;
+    background: linear-gradient(145deg, #2f65e6, #1f4cc4);
+    color: #ffffff;
+    box-shadow: var(--raise-sm);
+}
+
+.btn-primary:hover,
+.btn-solid:hover,
+.btn-module:hover,
+.btn-hero:hover {
+    background: linear-gradient(145deg, #3a70f0, #2250cf);
+}
+
+.btn-primary:active,
+.btn-solid:active,
+.btn-module:active,
+.btn-hero:active {
+    background: linear-gradient(145deg, #1f4cc4, #2f65e6);
+    box-shadow: inset 4px 4px 9px rgba(8, 24, 80, 0.5), inset -3px -3px 7px rgba(120, 165, 255, 0.35);
+}
+
+.btn-secondary,
+.btn-outline,
+.btn-hero-ghost,
+.btn-logout {
+    border: none;
+    background: var(--bg-color);
+    color: var(--primary);
+    box-shadow: var(--raise-sm);
+}
+
+.btn-secondary:hover,
+.btn-outline:hover,
+.btn-hero-ghost:hover {
+    color: var(--primary-deep);
+}
+
+.btn-secondary:active,
+.btn-outline:active,
+.btn-hero-ghost:active,
+.btn-logout:active {
+    box-shadow: var(--sink-sm);
+}
+
+.btn-primary,
+.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+
+.btn-secondary {
+    margin-top: 1rem;
+}
+
+.btn-solid,
+.btn-outline {
+    display: inline-block;
+    padding: 0.7rem 1.3rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+
+.btn-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-module {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 0.75rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.btn-module:disabled,
+.btn-solid:disabled,
+.btn-outline:disabled {
+    background: var(--bg-color);
+    color: var(--text-muted);
+    box-shadow: var(--sink-sm);
+    cursor: not-allowed;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    color: var(--error-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: box-shadow 0.2s;
+}
+
+/* ==========================================
+   4. AUTHENTICATION PAGES (Login / Register)
+   ========================================== */
+.auth-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 28px;
+    box-shadow: var(--raise);
+}
+
+.brand {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.brand-ph {
+    color: var(--accent-text);
+}
+
+.auth-card h2 {
+    margin-bottom: 0.25rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.auth-subtitle {
+    margin-bottom: 1.75rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.auth-footer-text {
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.auth-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+}
+
+/* "Login as: Student | Admin" switch (pure CSS, no JavaScript) */
+.role-toggle-label {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.role-toggle {
+    position: relative;
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    padding: 6px;
+    background: var(--bg-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--sink-sm);
+}
+
+.role-toggle input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.role-toggle label {
+    flex: 1;
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.role-toggle input:checked + label {
+    background: linear-gradient(145deg, #2f65e6, #1f4cc4);
+    color: #ffffff;
+    box-shadow: var(--raise-xs);
+}
+
+.role-toggle input:focus-visible + label {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================
+   5. FORMS AND INPUTS
+   ========================================== */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem 0.95rem;
+    background: var(--bg-color);
+    color: var(--text-main);
+    border: none;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--sink-sm);
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    box-shadow: var(--sink-sm), var(--focus-ring);
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Alerts */
+.alert {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    box-shadow: var(--raise-xs);
+}
+
+.alert.error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+}
+
+.alert.success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+/* ==========================================
+   6. BADGES
+   ========================================== */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 650;
+    white-space: nowrap;
+    box-shadow: var(--raise-2xs);
+}
+
+.badge-role      { background-color: var(--primary-soft); color: var(--primary-deep); }
+.badge-draft     { background-color: #e9eef8; color: #3a4a6b; }
+.badge-submitted { background-color: var(--primary-soft); color: var(--primary-deep); }
+.badge-approved,
+.badge-active    { background-color: var(--success-bg); color: var(--success-text); }
+.badge-rejected,
+.badge-inactive  { background-color: var(--error-bg); color: var(--error-text); }
+.badge-soon      { background-color: var(--accent-soft); color: var(--accent-text); }
+
+/* ==========================================
+   7. DASHBOARD BUILDING BLOCKS
+   ========================================== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+}
+
+.dashboard-container header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.25rem;
+    padding: 1.25rem 2rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--raise);
+}
+
+.dashboard-container header h2 {
+    font-size: 1.25rem;
+}
+
+.section {
+    margin-bottom: 2.75rem;
+}
+
+.section-title {
+    margin-bottom: 1.1rem;
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+}
+
+.card {
+    padding: 1.6rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--raise);
+}
+
+.card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.module-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.module-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.module-card-head h3 {
+    margin-bottom: 0;
+}
+
+.module-card p {
+    flex: 1;
+}
+
+.muted {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.status-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   8. SMALL SCREENS
+   ========================================== */
+@media (max-width: 640px) {
+    .auth-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .dashboard-container header {
+        padding: 1rem 1.25rem;
+    }
+}

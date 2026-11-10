@@ -1,0 +1,91 @@
+/* ==========================================
+   CCST Portal admin dashboard content: stat cards and the recent registrations table.
+   Loaded after style.css. The sidebar and page shell live in admin-forms.css.
+   ========================================== */
+
+.admin-sub {
+    margin-top: 0.15rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Stat cards ---------- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    position: relative;
+    padding: 1.4rem 1.35rem 1.25rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--raise-sm);
+}
+
+/* The only gold on the card: a short rule that marks it as a measure */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1.35rem;
+    width: 2.25rem;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(90deg, var(--accent-bright), var(--accent));
+}
+
+.stat-value {
+    font-size: 2.1rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--primary);
+}
+
+.stat-label {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Table ---------- */
+.table-wrap {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--raise);
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.95rem 1.1rem;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(150, 168, 203, 0.28);
+}
+
+.data-table th {
+    font-size: 0.8rem;
+    font-weight: 650;
+    color: var(--text-muted);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(36, 86, 216, 0.045);
+}
