@@ -178,14 +178,15 @@ foreach ($formRows as $row) {
 }
 
 // ------------------------------------------------------------------
-// Search
+// Search & Default Listing
 // ------------------------------------------------------------------
 $q = isset($_GET['q']) && is_string($_GET['q']) ? trim(mb_substr($_GET['q'], 0, 100)) : '';
 $statusFilter = isset($_GET['status']) && is_string($_GET['status']) ? $_GET['status'] : 'all';
 if ($statusFilter !== 'all' && !isset($statusMap[$statusFilter])) {
     $statusFilter = 'all';
 }
-$searched = isset($_GET['s']);
+// Force $searched to true by default so all recent forms show immediately
+$searched = true;
 
 $results = [];
 if ($searched) {
