@@ -61,6 +61,7 @@ $stats = [
     'transferee' => 0,
     'returnee'   => 0,
     'active'     => 0
+    
 ];
 $thisMonth = date('Y-m');
 
